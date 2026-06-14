@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { generateCoverLetter } from '../services/gemini.js'
+import * as pdfjsLib from 'pdfjs-dist'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
 function CoverLetterForm({ setLetter }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -8,6 +11,8 @@ function CoverLetterForm({ setLetter }) {
     company: '',
     skills: '',
   })
+  const [resume, setResume] = useState(null)
+  const [resumeText, setResumeText] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -18,20 +23,40 @@ function CoverLetterForm({ setLetter }) {
     })
   }
 
+  async function handleResumeUpload(e) {
+    const file = e.target.files[0]
+
+    if (!file) return
+
+    setResume(file)
+
+    const arrayBuffer = await file.arrayBuffer()
+
+    const pdf = await pdfjsLib.getDocument({
+      data: arrayBuffer,
+    }).promise
+
+    let text = ''
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i)
+
+      const content = await page.getTextContent()
+
+      text += content.items.map((item) => item.str).join(' ')
+    }
+
+    setResumeText(text)
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
     try {
-      const payload = {
-        name: formData.name.trim(),
-        role: formData.role.trim(),
-        company: formData.company.trim(),
-        skills: formData.skills.trim(),
-      }
-
-      const generatedLetter = await generateCoverLetter(payload)
+      const data = { ...formData, resumeText: resumeText }
+      const generatedLetter = await generateCoverLetter(data)
       setLetter(generatedLetter)
       setFormData({
         name: '',
@@ -39,6 +64,8 @@ function CoverLetterForm({ setLetter }) {
         company: '',
         skills: '',
       })
+      setResume(null)
+      setResumeText('')
     } catch (error) {
       console.error('Error generating cover letter:', error)
       setError(
@@ -57,7 +84,7 @@ function CoverLetterForm({ setLetter }) {
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-transparent text-white p-8 rounded-xl shadow-md mt-2 w-[80%] mx-auto border border-gray-700 backdrop-blur-2xl"
+        className="bg-transparent text-white p-8 rounded-xl shadow-md mt-2 w-[80%] mx-auto border border-gray-400 backdrop-blur-2xl"
         aria-busy={loading}
       >
         <label className="block mb-2 text-bold font-medium uppercase ">
@@ -117,12 +144,25 @@ function CoverLetterForm({ setLetter }) {
           onChange={handleChange}
           disabled={loading}
         />
+        <div className="mb-3">
+          <label className="block mb-2 font-medium">Upload Resume (PDF)</label>
 
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={handleResumeUpload}
+            className="w-full border p-3 rounded"
+          />
+
+          {resume && (
+            <p className="mt-2 text-green-600">Selected: {resume.name}</p>
+          )}
+        </div>
         {error ? <p className="mb-3 text-sm text-red-600">{error}</p> : null}
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-3 rounded w-full disabled:opacity-60"
+          className="bg-blue-600 text-white px-6 py-3 rounded w-full disabled:opacity-60 cursor-pointer"
           disabled={loading}
         >
           {loading ? 'Generating...' : 'Generate Cover Letter'}

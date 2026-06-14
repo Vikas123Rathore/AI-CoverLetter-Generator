@@ -7,13 +7,12 @@ Generate a professional, ATS-friendly, properly formatted cover letter (plain te
 Date: ${today}
 Recipient: Hiring Manager at ${data.company}
 Greeting: Dear Hiring Manager,
-
 Use the following details to write the letter.
 Name: ${data.name}
 Role: ${data.role}
 Company: ${data.company}
 Skills: ${data.skills}
-
+Resume Content:${data.resumeText}
 Requirements:
 - Include a short opening paragraph (1-2 sentences) that states the role and expresses interest.
 - Include 1-2 body paragraphs describing relevant experience and achievements tied to the role.
@@ -37,6 +36,12 @@ Make it ready-to-use for pasting into an email or document.
         model: "llama-3.3-70b-versatile",
         messages: [
           {
+            role: "system",
+            content:
+              "You are an expert recruiter and professional cover letter writer."
+          },
+
+          {
             role: "user",
             content: prompt,
           },
@@ -45,10 +50,11 @@ Make it ready-to-use for pasting into an email or document.
       }),
     }
   );
-
+  if (!response.ok) {
+    throw new Error(`Error generating cover letter: ${response.statusText}`);
+  }
   const result = await response.json();
 
-  console.log(result.choices[0].message.content);
 
   return result.choices[0].message.content;
 }
