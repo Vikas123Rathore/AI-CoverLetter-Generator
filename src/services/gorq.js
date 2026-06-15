@@ -18,7 +18,7 @@ Requirements:
 - Include 1-2 body paragraphs describing relevant experience and achievements tied to the role.
 - If skills are provided, include a short "Key Skills" bullet list (3-6 bullets).
 - End with a concise closing paragraph and a signature line using the candidate's name.
-- Keep the tone professional and concise; target 350-500 words.
+- Keep the tone professional and concise; target 350-600 words.
 - Output only the cover letter text with clear paragraph breaks and bullet lines (use hyphens for bullets). Do not include any commentary or metadata.
 
 Make it ready-to-use for pasting into an email or document.
