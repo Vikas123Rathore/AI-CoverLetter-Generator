@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { generateCoverLetter } from '../services/gemini.js'
+import { generateCoverLetter } from '../services/gorq.js'
 import * as pdfjsLib from 'pdfjs-dist'
 import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 
