@@ -42,4 +42,4 @@ To resolve PDF worker configuration issues.
 Review my AI Cover Letter Generator project against the Sprint 04 assignment requirements and identify any missing features or improvements.
 
 Purpose:
-To validate project completion before submission.
+To validate project completion before submission of details.
