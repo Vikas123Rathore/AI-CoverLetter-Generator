@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { generateCoverLetter } from '../services/gorq.js'
 import * as pdfjsLib from 'pdfjs-dist'
 import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
-
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
 function CoverLetterForm({ setLetter }) {
   const [formData, setFormData] = useState({
@@ -22,7 +21,7 @@ function CoverLetterForm({ setLetter }) {
       [e.target.name]: e.target.value,
     })
   }
-
+// function to upload resumne nd extract data from pdf
   async function handleResumeUpload(e) {
     const file = e.target.files[0]
 
@@ -48,6 +47,8 @@ function CoverLetterForm({ setLetter }) {
 
     setResumeText(text)
   }
+
+  // form sumbmittting  nd fetching data
 
   async function handleSubmit(e) {
     e.preventDefault()

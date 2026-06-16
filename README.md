@@ -94,12 +94,22 @@ src/
 		gorq.js
 ```
 
+## Website url
+
+https://ai-letter-generator.netlify.app/
+
 ## Notes
 
 - The app expects `VITE_GROQ_API_KEY` to be available in the browser build environment.
 - Resume uploads currently support PDF files only.
 - Generated output is designed to be professional, concise, and ready to use in an application.
 
+## Author
+
+This website was created by Vikas Rathore.
+
 ## License
 
 No license has been specified for this project yet.
+
+

@@ -2,6 +2,8 @@ import { toast } from 'react-hot-toast'
 import { jsPDF } from 'jspdf'
 import ReactMarkdown from 'react-markdown'
 function CoverLetterOutput({ letter }) {
+
+  // function for copying text
   function handleCopy() {
     navigator.clipboard
       .writeText(letter)
@@ -12,11 +14,12 @@ function CoverLetterOutput({ letter }) {
         toast.error('Failed to copy cover letter. Please try again.')
       })
   }
+
+  // function for downloading pdf
   function downloadPDF() {
     const doc = new jsPDF()
 
     doc.setFont('times', 'normal')
-    // doc.fontSize(12)
     const lines = doc.splitTextToSize(letter, 180)
     doc.text(lines, 10, 10)
     doc.save('cover-letter.pdf')
