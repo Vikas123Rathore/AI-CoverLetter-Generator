@@ -42,7 +42,7 @@ function CoverLetterOutput({ letter }) {
       </div>
 
       {letter ? (
-        <div className="space-y-4  bg-linear-to-r from-white  to-white bg-clip-text text-transparent font-serif  leading-8">
+        <div className="space-y-4  text-white font-serif  leading-8">
           <ReactMarkdown>{letter}</ReactMarkdown>
         </div>
       ) : (
